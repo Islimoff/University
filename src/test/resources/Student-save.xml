@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<groups group_id='4' name='Gr-4' />
+	
+	<students student_id='1' name='Max' />
+
+	<students student_id='2' name='Alex' />
+
+	<students student_id='3' name='Rick' />
+
+	<students student_id='4' name='Ivan' group_id='4' />
+</dataset>

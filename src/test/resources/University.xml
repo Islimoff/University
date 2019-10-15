@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<audiences audience_id='1' number='1' />
+
+	<audiences audience_id='2' number='2' />
+
+	<audiences audience_id='3' number='3' />
+	
+	<groups group_id='1' name='Gr-1' />
+
+	<groups group_id='2' name='Gr-2' />
+
+	<groups group_id='3' name='Gr-3' />
+	
+	<subjects subject_id='1' name='English' />
+
+	<subjects subject_id='2' name='Java' />
+
+	<subjects subject_id='3' name='Math' />
+	
+	<teachers teacher_id='1' name='Shon' />
+
+	<teachers teacher_id='2' name='Alex' />
+
+	<teachers teacher_id='3' name='Rick' />
+	
+	<students student_id='1' group_id='1' name='Max' />
+
+	<students student_id='2' name='Alex' />
+
+	<students student_id='3' name='Rick' />
+		
+	<lessons lesson_id='1' audience_id='1' teacher_id='1' subject_id='1' group_id='1' date='2019-12-12' start_lesson='08:00:00' end_lesson='09:20:00'/>
+
+	<lessons lesson_id='2' audience_id='2' teacher_id='2' subject_id='2' group_id='2' date='2020-12-12' start_lesson='10:00:00' end_lesson='10:20:00'/>
+
+	<lessons lesson_id='3' audience_id='3' teacher_id='3' subject_id='3' group_id='3' date='2020-12-12' start_lesson='11:00:00' end_lesson='12:20:00'/>
+</dataset>
