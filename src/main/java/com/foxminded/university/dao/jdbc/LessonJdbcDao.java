@@ -181,7 +181,7 @@ public class LessonJdbcDao implements LessonDao {
 		}
 		return audience.equals(findAudience) && localDate.equals(date) && findTime(time, lessonTime);
 	}
-
+ 
 	@Override
 	public boolean findTime(LessonTime lessonTime, LessonTime lessonTime2) {
 		Duration durationLesson = Duration.between(lessonTime.getStart(), lessonTime.getEnd());
