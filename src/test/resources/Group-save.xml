@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<groups group_id='1' name='Gr-1' />
+
+	<groups group_id='2' name='Gr-2' />
+
+	<groups group_id='3' name='Gr-3' />
+	
+	<groups group_id='4' name='Gr-4' />
+</dataset>
