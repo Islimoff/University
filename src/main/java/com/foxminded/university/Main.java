@@ -12,8 +12,7 @@ public class Main {
 
 	public static void main(String[] args) throws SQLException {
 		Scanner scanner = new Scanner(in);
-		University university = new University();
-		Options options = new Options(university, scanner);
+		Options options = new Options(scanner);
 		Menu menu = new Menu(options);
 		String answer;
 		do {

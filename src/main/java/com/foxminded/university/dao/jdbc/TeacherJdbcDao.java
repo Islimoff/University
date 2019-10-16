@@ -14,6 +14,12 @@ import com.foxminded.university.model.Teacher;
 public class TeacherJdbcDao implements TeacherDao {
 
 	private ConnecctionProvider provider;
+	private static final String INSERT = "INSERT INTO teachers(name) values(?)";
+	private static final String DELETE = "DELETE FROM teachers WHERE teacher_id=?";
+	private static final String INSERTSUBJECT = "INSERT INTO teachers_subjects(teacher_id,subject_id) values(?,?)";
+	private static final String UPDATE = "UPDATE teachers SET name=? WHERE teacher_id=?";
+	private static final String FINDBYNAME = "SELECT teacher_id, name FROM teachers WHERE name=?";
+	private static final String FINDBYID = "SELECT teacher_id, name FROM teachers WHERE teacher_id=?";
 
 	public TeacherJdbcDao(ConnecctionProvider provider) {
 		this.provider = provider;
@@ -22,8 +28,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	@Override
 	public Teacher add(Teacher teacher) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLTeacher.INSERT.QUERY,
-						Statement.RETURN_GENERATED_KEYS)) {
+				PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, teacher.getName());
 			statement.execute();
 			ResultSet resultSet = statement.getGeneratedKeys();
@@ -38,7 +43,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	@Override
 	public void addSubjectToTeacher(Teacher teacher, Subject subject) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLTeacher.INSERTSUBJECT.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(INSERTSUBJECT)) {
 			statement.setInt(1, teacher.getId());
 			statement.setInt(2, subject.getId());
 			statement.execute();
@@ -50,7 +55,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	@Override
 	public void remove(Teacher teacher) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLTeacher.DELETE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, teacher.getId());
 			statement.execute();
 		} catch (SQLException e) {
@@ -61,7 +66,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	@Override
 	public void update(Teacher teacher) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLTeacher.UPDATE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 			statement.setString(1, teacher.getName());
 			statement.setInt(2, teacher.getId());
 			statement.execute();
@@ -74,7 +79,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	public Teacher findByName(String name) {
 		Teacher teacher = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLTeacher.FINDBYNAME.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYNAME)) {
 			statement.setString(1, name);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -92,7 +97,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	public Teacher findById(int id) {
 		Teacher teacher = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLTeacher.FINDBYID.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYID)) {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -104,19 +109,5 @@ public class TeacherJdbcDao implements TeacherDao {
 			e.printStackTrace();
 		}
 		return teacher;
-	}
-
-	enum SQLTeacher {
-		INSERT("INSERT INTO teachers(name) values(?)"),
-		DELETE("DELETE FROM teachers WHERE teacher_id=?"),
-		INSERTSUBJECT("INSERT INTO teachers_subjects(teacher_id,subject_id) values(?,?)"),
-		UPDATE("UPDATE teachers SET name=? WHERE teacher_id=?"),
-		FINDBYNAME("SELECT teacher_id, name FROM teachers WHERE name=?"),
-		FINDBYID("SELECT teacher_id, name FROM teachers WHERE teacher_id=?");
-		String QUERY;
-
-		SQLTeacher(String QUERY) {
-			this.QUERY = QUERY;
-		}
 	}
 }

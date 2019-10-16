@@ -13,9 +13,9 @@ import com.foxminded.university.model.LessonTime;
 import com.foxminded.university.model.Teacher;
 
 public class LessonService {
-	
+
 	private ConnecctionProvider provider = new ConnecctionProvider();
-	private LessonDao lessonDao= new LessonJdbcDao(provider);
+	private LessonDao lessonDao = new LessonJdbcDao(provider);
 
 	public void add(Lesson lesson) {
 		lessonDao.add(lesson);
@@ -44,11 +44,4 @@ public class LessonService {
 	public boolean findAudience(Audience audience, LocalDate localDate, LessonTime lessonTime) {
 		return lessonDao.findAudience(audience, localDate, lessonTime);
 	}
-
-	public boolean findTime(LessonTime lessonTime, LessonTime lessonTime2) {
-		Duration durationLesson = Duration.between(lessonTime.getStart(), lessonTime.getEnd());
-		Duration perspectiveDurationLesson = Duration.between(lessonTime.getStart(), lessonTime2.getStart());
-		return durationLesson.toMinutes() > perspectiveDurationLesson.abs().toMinutes();
-	}
-
 }

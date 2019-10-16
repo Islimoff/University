@@ -13,6 +13,10 @@ import com.foxminded.university.model.Student;
 public class StudentJdbcDao implements StudentDao {
 
 	private ConnecctionProvider provider;
+	private static final String INSERT = "INSERT INTO students(name) values(?)";
+	private static final String DELETE = "DELETE FROM students WHERE student_id=?";
+	private static final String UPDATE = "UPDATE students SET name=?,group_id=? WHERE student_id=?";
+	private static final String FINDBYNAME = "SELECT student_id, group_id, name FROM students where name=?";
 
 	public StudentJdbcDao(ConnecctionProvider provider) {
 		this.provider = provider;
@@ -21,8 +25,7 @@ public class StudentJdbcDao implements StudentDao {
 	@Override
 	public Student add(Student student) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLStudent.INSERT.QUERY,
-						Statement.RETURN_GENERATED_KEYS)) {
+				PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, student.getName());
 			statement.execute();
 			ResultSet resultSet = statement.getGeneratedKeys();
@@ -37,7 +40,7 @@ public class StudentJdbcDao implements StudentDao {
 	@Override
 	public void remove(Student student) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLStudent.DELETE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, student.getId());
 			statement.execute();
 		} catch (SQLException e) {
@@ -48,7 +51,7 @@ public class StudentJdbcDao implements StudentDao {
 	@Override
 	public void update(Student student) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLStudent.UPDATE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 			statement.setString(1, student.getName());
 			statement.setInt(2, student.getGroupId());
 			statement.setInt(3, student.getId());
@@ -62,7 +65,7 @@ public class StudentJdbcDao implements StudentDao {
 	public Student findByName(String name) {
 		Student student = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLStudent.FINDBYNAME.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYNAME)) {
 			statement.setString(1, name);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -75,17 +78,5 @@ public class StudentJdbcDao implements StudentDao {
 			e.printStackTrace();
 		}
 		return student;
-	}
-
-	enum SQLStudent {
-		INSERT("INSERT INTO students(name) values(?)"),
-		DELETE("DELETE FROM students WHERE student_id=?"),
-		UPDATE("UPDATE students SET name=?,group_id=? WHERE student_id=?"),
-		FINDBYNAME("SELECT student_id, group_id, name FROM students where name=?");
-		String QUERY;
-
-		SQLStudent(String QUERY) {
-			this.QUERY = QUERY;
-		}
 	}
 }

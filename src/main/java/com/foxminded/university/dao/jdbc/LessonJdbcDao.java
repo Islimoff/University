@@ -25,6 +25,13 @@ import com.foxminded.university.model.Teacher;
 public class LessonJdbcDao implements LessonDao {
 
 	private ConnecctionProvider provider;
+	private static final String INSERT="INSERT INTO lessons (audience_id,teacher_id, subject_id, group_id, date, start_lesson, end_lesson) values(?,?,?,?,?,?,?)";
+	private static final String DELETE="DELETE FROM lessons WHERE lesson_id=?";
+	private static final String	FINDBYDATE="SELECT lesson_id FROM lessons WHERE date=?";
+	private static final String	FINDBYID="SELECT lesson_id, audience_id, teacher_id, subject_id, group_id, date, start_lesson, end_lesson FROM lessons WHERE lesson_id=?";
+	private static final String	FINDBYGROUP="SELECT group_id, date, start_lesson, end_lesson FROM lessons WHERE group_id=?";
+	private static final String	FINDBYTEACHER="SELECT teacher_id, date, start_lesson, end_lesson FROM lessons WHERE teacher_id=?";
+	private static final String	FINDBYAUDIENCE="SELECT audience_id, date, start_lesson, end_lesson FROM lessons WHERE audience_id=?";
 
 	public LessonJdbcDao(ConnecctionProvider provider) {
 		this.provider = provider;
@@ -33,7 +40,7 @@ public class LessonJdbcDao implements LessonDao {
 	@Override
 	public Lesson add(Lesson lesson) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.INSERT.QUERY,
+				PreparedStatement statement = connection.prepareStatement(INSERT,
 						Statement.RETURN_GENERATED_KEYS)) {
 			statement.setInt(1, lesson.getAudience().getId());
 			statement.setInt(2, lesson.getTeacher().getId());
@@ -56,7 +63,7 @@ public class LessonJdbcDao implements LessonDao {
 	@Override
 	public void remove(Lesson lesson) {
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.DELETE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, lesson.getId());
 			statement.execute();
 		} catch (SQLException e) {
@@ -68,7 +75,7 @@ public class LessonJdbcDao implements LessonDao {
 	public Lesson findById(int id) {
 		Lesson lesson = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.FINDBYID.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYID)) {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -99,7 +106,7 @@ public class LessonJdbcDao implements LessonDao {
 	public List<Lesson> findByDate(LocalDate date) {
 		List<Lesson> lessons = new ArrayList<>();
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.FINDBYDATE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYDATE)) {
 			statement.setDate(1, Date.valueOf(date));
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -119,7 +126,7 @@ public class LessonJdbcDao implements LessonDao {
 		LessonTime time = null;
 		LocalDate date = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.FINDBYGROUP.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYGROUP)) {
 			statement.setInt(1, group.getId());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -142,7 +149,7 @@ public class LessonJdbcDao implements LessonDao {
 		LessonTime time = null;
 		LocalDate date = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.FINDBYTEACHER.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYTEACHER)) {
 			statement.setInt(1, teacher.getId());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -165,7 +172,7 @@ public class LessonJdbcDao implements LessonDao {
 		LessonTime time = null;
 		LocalDate date = null;
 		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(SQLLesson.FINDBYAUDIENCE.QUERY)) {
+				PreparedStatement statement = connection.prepareStatement(FINDBYAUDIENCE)) {
 			statement.setInt(1, audience.getId());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
@@ -187,20 +194,5 @@ public class LessonJdbcDao implements LessonDao {
 		Duration durationLesson = Duration.between(lessonTime.getStart(), lessonTime.getEnd());
 		Duration perspectiveDurationLesson = Duration.between(lessonTime.getStart(), lessonTime2.getStart());
 		return durationLesson.toMinutes() > perspectiveDurationLesson.abs().toMinutes();
-	}
-
-	enum SQLLesson {
-		INSERT("INSERT INTO lessons (audience_id,teacher_id, subject_id, group_id, date, start_lesson, end_lesson) values(?,?,?,?,?,?,?)"),
-		DELETE("DELETE FROM lessons WHERE lesson_id=?"),
-		FINDBYDATE("SELECT lesson_id FROM lessons WHERE date=?;"),
-		FINDBYID("SELECT lesson_id, audience_id, teacher_id, subject_id, group_id, date, start_lesson, end_lesson FROM lessons WHERE lesson_id=?"),
-		FINDBYGROUP("SELECT group_id, date, start_lesson, end_lesson FROM lessons WHERE group_id=?"),
-		FINDBYTEACHER("SELECT teacher_id, date, start_lesson, end_lesson FROM lessons WHERE teacher_id=?"),
-		FINDBYAUDIENCE("SELECT audience_id, date, start_lesson, end_lesson FROM lessons WHERE audience_id=?");
-		String QUERY;
-
-		SQLLesson(String QUERY) {
-			this.QUERY = QUERY;
-		}
 	}
 }

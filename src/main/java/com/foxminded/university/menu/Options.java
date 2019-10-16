@@ -18,14 +18,26 @@ import com.foxminded.university.model.MonthSchedule;
 import com.foxminded.university.model.Student;
 import com.foxminded.university.model.Subject;
 import com.foxminded.university.model.Teacher;
+import com.foxminded.university.service.AudienceService;
+import com.foxminded.university.service.GroupService;
+import com.foxminded.university.service.LessonService;
+import com.foxminded.university.service.ScheduleService;
+import com.foxminded.university.service.StudentService;
+import com.foxminded.university.service.SubjectService;
+import com.foxminded.university.service.TeacherService;
 
 public class Options {
 
-	private University university;
-	private Scanner scanner;
+	private AudienceService audienceService;
+	private GroupService groupService;
+	private LessonService lessonService;
+	private	ScheduleService scheduleService;
+	private	StudentService studentService;
+	private	SubjectService subjectService;
+	private TeacherService teacherService;
+	private	 Scanner scanner;
 
-	public Options(University university, Scanner scanner) {
-		this.university = university;
+	public Options(Scanner scanner) {
 		this.scanner = scanner;
 	}
 
@@ -33,31 +45,31 @@ public class Options {
 		System.out.println("Enter the name of the teacher you want to add");
 		Teacher teacher = new Teacher();
 		teacher.setName(scanner.nextLine());
-		university.addTeacher(teacher);
+		teacherService.add(teacher);
 		System.out.println("The teacher successfully added");
 	}
 
 	public void removeTeacher() {
 		System.out.println("Enter the name of the teacher you want to remove");
-		String teacherName = scanner.nextLine();
-		Teacher teacher = university.findTeacher(teacherName);
+		String name = scanner.nextLine();
+		Teacher teacher = teacherService.findByName(name);
 		if (teacher == null) {
 			System.out.println("This name was not found");
 		} else {
-			university.removeTeacher(teacher);
+			teacherService.remove(teacher);
 			System.out.println("The teacher successfully removed");
 		}
 	}
 
 	public void addSubjectsToTeacher() {
 		System.out.println("Enter the name of the teacher to whom you want to add the subject");
-		String teacherName = scanner.nextLine();
-		Teacher teacher = university.findTeacher(teacherName);
+		String name = scanner.nextLine();
+		Teacher teacher = teacherService.findByName(name);
 		if (teacher == null) {
 			System.out.println("This name was not found");
 		} else {
 			System.out.println("Enter the name of the subject that the teacher will lead");
-			Subject subject = university.findSubject(scanner.nextLine());
+			Subject subject = subjectService.findByName(scanner.nextLine());
 			if (subject == null) {
 				System.out.println("This name was not found");
 			} else {
@@ -69,7 +81,7 @@ public class Options {
 
 	public void printTeacherDaySchedule() {
 		System.out.println("Enter the name of the teacher for whom you want to get the day schedule");
-		Teacher teacher = university.findTeacher(scanner.nextLine());
+		Teacher teacher = teacherService.findByName(scanner.nextLine());
 		if (teacher == null) {
 			System.out.println("This name was not found");
 		} else {
@@ -77,7 +89,7 @@ public class Options {
 			String dateText = scanner.nextLine();
 			try {
 				LocalDate date = LocalDate.parse(dateText);
-				DaySchedule daySchedule = university.findTeacherDaySchedule(teacher, date);
+				DaySchedule daySchedule = scheduleService.findTeacherDaySchedule(teacher, date);
 				showDaySchedule(daySchedule);
 			} catch (DateTimeParseException e) {
 				System.out.println("That's not a valid date.");
