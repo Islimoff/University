@@ -60,7 +60,7 @@ public class LessonJdbcDaoTest extends DBUnitConfig {
 		audience.setNumber(3);
 		lesson.setAudience(audience);
 		group.setId(3);
-		group.setGroupName("Gr-3");
+		group.setName("Gr-3");
 		lesson.setGroup(group);
 		teacher.setId(3);
 		teacher.setName("Rick");
@@ -87,7 +87,7 @@ public class LessonJdbcDaoTest extends DBUnitConfig {
 		audience.setNumber(3);
 		lesson.setAudience(audience);
 		group.setId(3);
-		group.setGroupName("Gr-3");
+		group.setName("Gr-3");
 		lesson.setGroup(group);
 		teacher.setId(3);
 		teacher.setName("Rick");
@@ -115,7 +115,7 @@ public class LessonJdbcDaoTest extends DBUnitConfig {
 		audience.setNumber(3);
 		lesson.setAudience(audience);
 		group.setId(3);
-		group.setGroupName("Gr-3");
+		group.setName("Gr-3");
 		lesson.setGroup(group);
 		teacher.setId(3);
 		teacher.setName("Rick");
@@ -144,7 +144,7 @@ public class LessonJdbcDaoTest extends DBUnitConfig {
 		audience.setNumber(1);
 		lesson.setAudience(audience);
 		group.setId(1);
-		group.setGroupName("Gr-1");
+		group.setName("Gr-1");
 		lesson.setGroup(group);
 		teacher.setId(1);
 		teacher.setName("Shon");
@@ -170,7 +170,7 @@ public class LessonJdbcDaoTest extends DBUnitConfig {
 	@Test
 	public void testGivenGroupAndLessonTimeAndDate_whenFindLessonTime_thenTrue() {
 		group.setId(1);
-		group.setGroupName("Gr-1");
+		group.setName("Gr-1");
 		lessonTime.setStart(LocalTime.of(8, 00));
 		lessonTime.setEnd(LocalTime.of(9, 20));
 
@@ -181,7 +181,7 @@ public class LessonJdbcDaoTest extends DBUnitConfig {
 	@Test
 	public void testGivenGroupAndLessonTimeAndDate_whenFindLessonTime_thenFalse() {
 		group.setId(1);
-		group.setGroupName("Gr-1");
+		group.setName("Gr-1");
 		lessonTime.setStart(LocalTime.of(8, 00));
 		lessonTime.setEnd(LocalTime.of(9, 20));
 

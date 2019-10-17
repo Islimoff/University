@@ -12,4 +12,6 @@ public interface GroupDao {
 	public Group findByName(String name);
 
 	public Group findByStudent(Student student);
+
+	Group findById(int id);
 }

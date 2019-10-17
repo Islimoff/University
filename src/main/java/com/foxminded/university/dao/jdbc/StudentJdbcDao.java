@@ -49,7 +49,7 @@ public class StudentJdbcDao implements StudentDao {
 	}
 
 	@Override
-	public void update(Student student) {
+	public Student update(Student student) {
 		try (Connection connection = provider.getConnection();
 				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 			statement.setString(1, student.getName());
@@ -59,6 +59,7 @@ public class StudentJdbcDao implements StudentDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return student;
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class DayScheduleServiceTest {
 		lessonTime.setEnd(LocalTime.of(13, 20));
 		audience.setNumber(1);
 		lesson.setAudience(audience);
-		group.setGroupName("Group1");
+		group.setName("Group1");
 		lesson.setGroup(group);
 		teacher.setName("Walter White");
 		lesson.setTeacher(teacher);

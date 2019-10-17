@@ -11,19 +11,23 @@ public class GroupService {
 	private ConnecctionProvider provider = new ConnecctionProvider();
 	private GroupDao groupDao = new GroupJdbcDao(provider);
 
-	public void addAudience(Group group) {
+	public void add(Group group) {
 		groupDao.add(group);
 	}
 
-	public void removeAudience(Group group) {
+	public void remove(Group group) {
 		groupDao.remove(group);
 	}
 
-	public Group findGroupByName(String name) {
+	public Group findByName(String name) {
 		return groupDao.findByName(name);
 	}
 
-	public Group findAudienceById(Student student) {
+	public Group findByStudent(Student student) {
 		return groupDao.findByStudent(student);
+	}
+
+	public Group findById(int id) {
+		return groupDao.findById(id);
 	}
 }

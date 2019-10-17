@@ -56,9 +56,7 @@ public class AudienceJdbcDao implements AudienceDao {
 			statement.setInt(1, number);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				audience = new Audience();
-				audience.setId(resultSet.getInt("audience_id"));
-				audience.setNumber(resultSet.getInt("number"));
+				audience = mapToAudience(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,13 +72,18 @@ public class AudienceJdbcDao implements AudienceDao {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				audience = new Audience();
-				audience.setId(resultSet.getInt("audience_id"));
-				audience.setNumber(resultSet.getInt("number"));
+				audience = mapToAudience(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return audience;
+	}
+
+	private Audience mapToAudience(ResultSet resultSet) throws SQLException {
+		Audience audience = new Audience();
+		audience.setId(resultSet.getInt("audience_id"));
+		audience.setNumber(resultSet.getInt("number"));
 		return audience;
 	}
 }

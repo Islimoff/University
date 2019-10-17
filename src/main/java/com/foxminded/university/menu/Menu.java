@@ -45,9 +45,8 @@ public class Menu {
 		System.out.println("Selected action:");
 		System.out.println("1.Add teacher");
 		System.out.println("2.Remove teacher");
-		System.out.println("3.Add subjects to teacher");
-		System.out.println("4.Find teacher day schedule");
-		System.out.println("5.Find teacher month schedule");
+		System.out.println("3.Find teacher day schedule");
+		System.out.println("4.Find teacher month schedule");
 		int maxNumber = 5;
 		switch (options.validateNumber(maxNumber)) {
 		case 1:
@@ -57,12 +56,9 @@ public class Menu {
 			options.removeTeacher();
 			break;
 		case 3:
-			options.addSubjectsToTeacher();
-			break;
-		case 4:
 			options.printTeacherDaySchedule();
 			break;
-		case 5:
+		case 4:
 			options.printTeacherMonthSchedule();
 			break;
 		}

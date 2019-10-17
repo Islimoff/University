@@ -1,9 +1,13 @@
 package com.foxminded.university.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Teacher {
 
 	private String name;
 	private int id;
+	private List<Subject> subjects = new ArrayList<>();
 
 	public String getName() {
 		return name;
@@ -21,6 +25,14 @@ public class Teacher {
 		this.id = id;
 	}
 
+	public List<Subject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
@@ -29,7 +41,7 @@ public class Teacher {
 			return false;
 		else {
 			Teacher teacher = (Teacher) obj;
-			return teacher.name.equals(this.name) && this.id == teacher.id;
+			return teacher.name.equals(this.name) && this.id == teacher.id && this.subjects.equals(teacher.subjects);
 		}
 	}
 }

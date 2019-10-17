@@ -24,10 +24,11 @@ public class GroupJdbcDao implements GroupDao {
 		this.provider = provider;
 	}
 
+	@Override
 	public Group add(Group group) {
 		try (Connection connection = provider.getConnection();
 				PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-			statement.setString(1, group.getGroupName());
+			statement.setString(1, group.getName());
 			statement.execute();
 			ResultSet resultSet = statement.getGeneratedKeys();
 			resultSet.next();
@@ -38,6 +39,7 @@ public class GroupJdbcDao implements GroupDao {
 		return group;
 	}
 
+	@Override
 	public void remove(Group group) {
 		try (Connection connection = provider.getConnection();
 				PreparedStatement statement = connection.prepareStatement(DELETE)) {
@@ -48,6 +50,7 @@ public class GroupJdbcDao implements GroupDao {
 		}
 	}
 
+	@Override
 	public Group findByName(String name) {
 		Group group = null;
 		try (Connection connection = provider.getConnection();
@@ -55,9 +58,7 @@ public class GroupJdbcDao implements GroupDao {
 			statement.setString(1, name);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				group = new Group();
-				group.setId(resultSet.getInt("group_id"));
-				group.setGroupName(resultSet.getString("name"));
+				group = mapToGroup(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,6 +66,7 @@ public class GroupJdbcDao implements GroupDao {
 		return group;
 	}
 
+	@Override
 	public Group findById(int id) {
 		Group group = null;
 		try (Connection connection = provider.getConnection();
@@ -72,9 +74,7 @@ public class GroupJdbcDao implements GroupDao {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				group = new Group();
-				group.setId(resultSet.getInt("group_id"));
-				group.setGroupName(resultSet.getString("name"));
+				group = mapToGroup(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,6 +82,7 @@ public class GroupJdbcDao implements GroupDao {
 		return group;
 	}
 
+	@Override
 	public Group findByStudent(Student student) {
 		Group group = null;
 		try (Connection connection = provider.getConnection();
@@ -89,13 +90,18 @@ public class GroupJdbcDao implements GroupDao {
 			statement.setString(1, student.getName());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				group = new Group();
-				group.setId(resultSet.getInt("group_id"));
-				group.setGroupName(resultSet.getString("name"));
+				group = mapToGroup(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return group;
+	}
+
+	private Group mapToGroup(ResultSet resultSet) throws SQLException {
+		Group group = new Group();
+		group.setId(resultSet.getInt("group_id"));
+		group.setName(resultSet.getString("name"));
 		return group;
 	}
 }

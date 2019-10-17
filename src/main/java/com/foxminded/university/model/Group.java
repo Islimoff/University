@@ -3,14 +3,14 @@ package com.foxminded.university.model;
 public class Group {
 
 	private int id;
-	private String groupName;
+	private String name;
 
-	public String getGroupName() {
-		return groupName;
+	public String getName() {
+		return name;
 	}
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getId() {
@@ -29,7 +29,7 @@ public class Group {
 			return false;
 		else {
 			Group group = (Group) obj;
-			return group.groupName.equals(this.groupName) && this.id == group.id;
+			return group.name.equals(this.name) && this.id == group.id;
 		}
 	}
 }

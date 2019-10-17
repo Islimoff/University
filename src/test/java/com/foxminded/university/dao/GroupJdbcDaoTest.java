@@ -41,7 +41,7 @@ public class GroupJdbcDaoTest extends DBUnitConfig {
 
 	@Test
 	public void testAdd() throws Exception {
-		group.setGroupName("Gr-4");
+		group.setName("Gr-4");
 		groupJdbcDao.add(group);
 		IDataSet expectedData = new FlatXmlDataSetBuilder().build(new FileInputStream(getFilePath("Group-save.xml")));
 		IDataSet actualData = tester.getConnection().createDataSet();
@@ -53,7 +53,7 @@ public class GroupJdbcDaoTest extends DBUnitConfig {
 	@Test
 	public void testRemove() throws Exception {
 		group.setId(3);
-		group.setGroupName("Gr-3");
+		group.setName("Gr-3");
 		groupJdbcDao.remove(group);
 		IDataSet expectedData = new FlatXmlDataSetBuilder().build(new FileInputStream(getFilePath("Group-remove.xml")));
 		IDataSet actualData = tester.getConnection().createDataSet();
@@ -65,7 +65,7 @@ public class GroupJdbcDaoTest extends DBUnitConfig {
 	@Test
 	public void testGivenGroupName_whenFindByName_thenGroup() {
 		group.setId(1);
-		group.setGroupName("Gr-1");
+		group.setName("Gr-1");
 		assertEquals(group, groupJdbcDao.findByName("Gr-1"));
 	}
 
@@ -79,7 +79,7 @@ public class GroupJdbcDaoTest extends DBUnitConfig {
 	public void testGivenStudent_whenFindByStudent_thenGroup() {
 		student.setName("Max");
 		student.setGroupId(1);
-		group.setGroupName("Gr-1");
+		group.setName("Gr-1");
 		group.setId(1);
 
 		assertEquals(group, groupJdbcDao.findByStudent(student));

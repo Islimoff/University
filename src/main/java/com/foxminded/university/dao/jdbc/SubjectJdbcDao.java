@@ -56,11 +56,7 @@ public class SubjectJdbcDao implements SubjectDao {
 			statement.setString(1, name);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				int id = resultSet.getInt("subject_id");
-				String subjectName = resultSet.getString("name");
-				subject = new Subject();
-				subject.setId(id);
-				subject.setName(subjectName);
+				subject = mapToSubject(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,13 +72,18 @@ public class SubjectJdbcDao implements SubjectDao {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				subject = new Subject();
-				subject.setId(resultSet.getInt("subject_id"));
-				subject.setName(resultSet.getString("name"));
+				subject = mapToSubject(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return subject;
+	}
+
+	private Subject mapToSubject(ResultSet resultSet) throws SQLException {
+		Subject subject = new Subject();
+		subject.setId(resultSet.getInt("subject_id"));
+		subject.setName(resultSet.getString("name"));
 		return subject;
 	}
 }

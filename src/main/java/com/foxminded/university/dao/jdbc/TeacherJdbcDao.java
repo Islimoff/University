@@ -16,8 +16,9 @@ public class TeacherJdbcDao implements TeacherDao {
 	private ConnecctionProvider provider;
 	private static final String INSERT = "INSERT INTO teachers(name) values(?)";
 	private static final String DELETE = "DELETE FROM teachers WHERE teacher_id=?";
-	private static final String INSERTSUBJECT = "INSERT INTO teachers_subjects(teacher_id,subject_id) values(?,?)";
+	private static final String INSERTTEACHERSUBJECTS = "INSERT INTO teachers_subjects(teacher_id,subject_id) values(?,?)";
 	private static final String UPDATE = "UPDATE teachers SET name=? WHERE teacher_id=?";
+	private static final String UPDATETEACHERSUBJECTS = "UPDATE teachers_subjects SET subject_id=? WHERE teacher_id=?";
 	private static final String FINDBYNAME = "SELECT teacher_id, name FROM teachers WHERE name=?";
 	private static final String FINDBYID = "SELECT teacher_id, name FROM teachers WHERE teacher_id=?";
 
@@ -37,19 +38,8 @@ public class TeacherJdbcDao implements TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		teacher.getSubjects().forEach(subject -> addTeacherSubjects(teacher, subject, INSERTTEACHERSUBJECTS));
 		return teacher;
-	}
-
-	@Override
-	public void addSubjectToTeacher(Teacher teacher, Subject subject) {
-		try (Connection connection = provider.getConnection();
-				PreparedStatement statement = connection.prepareStatement(INSERTSUBJECT)) {
-			statement.setInt(1, teacher.getId());
-			statement.setInt(2, subject.getId());
-			statement.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -64,7 +54,7 @@ public class TeacherJdbcDao implements TeacherDao {
 	}
 
 	@Override
-	public void update(Teacher teacher) {
+	public Teacher update(Teacher teacher) {
 		try (Connection connection = provider.getConnection();
 				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 			statement.setString(1, teacher.getName());
@@ -73,6 +63,8 @@ public class TeacherJdbcDao implements TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		teacher.getSubjects().forEach(subject -> addTeacherSubjects(teacher, subject, UPDATETEACHERSUBJECTS));
+		return teacher;
 	}
 
 	@Override
@@ -83,9 +75,7 @@ public class TeacherJdbcDao implements TeacherDao {
 			statement.setString(1, name);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				teacher = new Teacher();
-				teacher.setId(resultSet.getInt("teacher_id"));
-				teacher.setName(resultSet.getString("name"));
+				teacher = mapToTeacher(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -101,13 +91,29 @@ public class TeacherJdbcDao implements TeacherDao {
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				teacher = new Teacher();
-				teacher.setId(resultSet.getInt("teacher_id"));
-				teacher.setName(resultSet.getString("name"));
+				teacher = mapToTeacher(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return teacher;
+	}
+
+	private void addTeacherSubjects(Teacher teacher, Subject subject, String qwery) {
+		try (Connection connection = provider.getConnection();
+				PreparedStatement statement = connection.prepareStatement(qwery)) {
+			statement.setInt(1, teacher.getId());
+			statement.setInt(2, subject.getId());
+			statement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Teacher mapToTeacher(ResultSet resultSet) throws SQLException {
+		Teacher teacher = new Teacher();
+		teacher.setId(resultSet.getInt("teacher_id"));
+		teacher.setName(resultSet.getString("name"));
 		return teacher;
 	}
 }
