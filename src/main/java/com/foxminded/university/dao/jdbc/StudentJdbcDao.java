@@ -17,6 +17,7 @@ public class StudentJdbcDao implements StudentDao {
 	private static final String DELETE = "DELETE FROM students WHERE student_id=?";
 	private static final String UPDATE = "UPDATE students SET name=?,group_id=? WHERE student_id=?";
 	private static final String FINDBYNAME = "SELECT student_id, group_id, name FROM students where name=?";
+	private static final String FINDBYID = "SELECT student_id, name FROM students WHERE student_id=?";
 
 	public StudentJdbcDao(ConnecctionProvider provider) {
 		this.provider = provider;
@@ -70,14 +71,35 @@ public class StudentJdbcDao implements StudentDao {
 			statement.setString(1, name);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				student = new Student();
-				student.setId(resultSet.getInt("student_id"));
-				student.setGroupId(resultSet.getInt("group_id"));
-				student.setName(resultSet.getString("name"));
+				student = mapToStudent(resultSet);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return student;
+	}
+
+	@Override
+	public Student findById(int id) {
+		Student student = null;
+		try (Connection connection = provider.getConnection();
+				PreparedStatement statement = connection.prepareStatement(FINDBYID)) {
+			statement.setInt(1, id);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				student = mapToStudent(resultSet);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return student;
+	}
+
+	private Student mapToStudent(ResultSet resultSet) throws SQLException {
+		Student student = new Student();
+		student.setId(resultSet.getInt("student_id"));
+		student.setGroupId(resultSet.getInt("group_id"));
+		student.setName(resultSet.getString("name"));
 		return student;
 	}
 }

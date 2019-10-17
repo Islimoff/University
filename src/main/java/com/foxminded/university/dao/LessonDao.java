@@ -9,13 +9,7 @@ import com.foxminded.university.model.Lesson;
 import com.foxminded.university.model.LessonTime;
 import com.foxminded.university.model.Teacher;
 
-public interface LessonDao {
-
-	Lesson add(Lesson lesson);
-
-	void remove(Lesson lesson);
-
-	Lesson findById(int id);
+public interface LessonDao extends GeneralDao<Lesson> {
 
 	List<Lesson> findByDate(LocalDate date);
 

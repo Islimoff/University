@@ -1,10 +1,10 @@
 package com.foxminded.university.dao;
 
-public interface GeneralDao {
+public interface GeneralDao<T> {
 	
-	Object add(Object object);
+	T add(T entity);
 
-	void remove(Object object);
-	
-	Object findById(int id);
+	T findById(int id);
+
+	void remove(T entity);
 }

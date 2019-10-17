@@ -2,16 +2,9 @@ package com.foxminded.university.dao;
 
 import com.foxminded.university.model.Teacher;
 
-public interface TeacherDao {
- 
-		Teacher findByName(String name);
+public interface TeacherDao extends GeneralDao<Teacher> {
 
-		Teacher add(Teacher teacher);
+	Teacher findByName(String name);
 
-		void remove(Teacher teacher);
-
-		Teacher update(Teacher teacher);
-
-		Teacher findById(int id);
-	}
-
+	Teacher update(Teacher teacher);
+}

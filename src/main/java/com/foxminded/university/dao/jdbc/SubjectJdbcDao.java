@@ -23,7 +23,7 @@ public class SubjectJdbcDao implements SubjectDao {
 	}
 
 	@Override
-	public void add(Subject subject) {
+	public Subject add(Subject subject) {
 		try (Connection connection = provider.getConnection();
 				PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, subject.getName());
@@ -34,10 +34,11 @@ public class SubjectJdbcDao implements SubjectDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return subject;
 	}
 
 	@Override
-	public Subject remove(Subject subject) {
+	public void remove(Subject subject) {
 		try (Connection connection = provider.getConnection();
 				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, subject.getId());
@@ -45,7 +46,6 @@ public class SubjectJdbcDao implements SubjectDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return subject;
 	}
 
 	@Override
